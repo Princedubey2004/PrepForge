@@ -101,8 +101,8 @@ export default function ProblemsList() {
                 <div className="col-span-3 text-right">Acceptance</div>
               </div>
               
-              {filteredQuestions.map((q) => {
-                const isSolved = user?.solvedProblems?.includes(q._id);
+              {filteredQuestions.map((q: any) => {
+                const isSolved = (user as any)?.solvedProblems?.includes(q._id);
                 const accRate = q.totalSubmissions > 0 
                   ? Math.round((q.totalAccepted / q.totalSubmissions) * 100) 
                   : 0;
