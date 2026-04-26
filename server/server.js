@@ -14,19 +14,21 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 
 // --- CORS CONFIG ---
-// We need to allow our Vercel frontend to talk to this server.
+// We allow local development and our production Vercel URL
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3001',
+  'https://prep-forge-olive.vercel.app', // Added your specific Vercel URL
   process.env.FRONTEND_URL, 
 ].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // If the origin is in our list, or it's a local request (no origin), we're good
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow if origin is in list, or if no origin (like server-to-server or Postman)
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
-      console.log(`[CORS] Blocked request from: ${origin}`);
+      console.log(`[CORS Error] Refused request from: ${origin}`);
       callback(new Error('Not allowed by CORS policy'));
     }
   },
